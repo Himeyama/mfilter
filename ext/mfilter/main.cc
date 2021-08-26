@@ -12,11 +12,11 @@ VALUE rb_m_filter(VALUE self, VALUE b, VALUE a, VALUE x){
         ma(dim_vector(RARRAY_LEN(a), 1)),
         mx(dim_vector(RARRAY_LEN(x), 1));
     for(long i = 0; i < RARRAY_LEN(b); i++)
-        mb(i, 0) = rb_ary_entry(b, i);
+        mb(i, 0) = NUM2DBL(rb_ary_entry(b, i));
     for(long i = 0; i < RARRAY_LEN(a); i++)
-        ma(i, 0) = rb_ary_entry(a, i);
+        ma(i, 0) = NUM2DBL(rb_ary_entry(a, i));
     for(long i = 0; i < RARRAY_LEN(x); i++)
-        mx(i, 0) = rb_ary_entry(x, i);
+        mx(i, 0) = NUM2DBL(rb_ary_entry(x, i));
     MArray<double> my = filter(mb, ma, mx);
     VALUE y = rb_ary_new();
     for(long i = 0; i < RARRAY_LEN(x); i++)
