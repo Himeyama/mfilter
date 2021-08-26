@@ -40,6 +40,8 @@ open("test/data.dat", "w") do |f|
 end
 ```
 
+![example](https://user-images.githubusercontent.com/39254183/130913789-0245fa7f-1537-456c-8669-58ef9d9ab89c.png)
+
 
 
 ## Contributing
