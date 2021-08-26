@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Murata Mitsuharu"]
   spec.email         = ["hikari.photon+dev@gmail.com"]
 
-  spec.summary       = "Matlab filter function compatibility."
+  spec.summary       = "Function module similar to `filter` in MatLab or Octave."
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{\A(?:test|spec|features)/}) }
