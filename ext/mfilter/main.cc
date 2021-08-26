@@ -1,4 +1,4 @@
-#include <octave-5.2.0/octave/oct.h>
+#include <octave/oct.h>
 #include <iostream>
 #include <math.h>
 #include <vector>
@@ -26,6 +26,8 @@ VALUE rb_m_filter(VALUE self, VALUE b, VALUE a, VALUE x, VALUE si){
         for(long i = 0; i < RARRAY_LEN(si); i++)
             msi(i, 0) = NUM2DBL(rb_ary_entry(si, i));
         my = filter(mb, ma, mx, msi);
+    }else{
+        return Qfalse;
     }
     
     VALUE y = rb_ary_new();
