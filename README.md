@@ -1,4 +1,6 @@
 # Mfilter
+[![Gem Version](https://badge.fury.io/rb/mfilter.svg)](https://badge.fury.io/rb/mfilter)
+
 MatLab (Octave) ライクの `filter` 関数の Ruby 実装。
 
 ## インストール方法
