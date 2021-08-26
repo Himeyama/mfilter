@@ -22,11 +22,25 @@ Gem のインストールを実行:
     $ gem install specific_install
     $ gem specific_install -l "himeyama/mfilter.git"
 
-## 使用法
-
+## 使用例
 ```ruby
+#!/usr/bin/env ruby
+
 require "mfilter"
+
+t = Array.new(100){|i| -Math::PI + i * 2 * Math::PI / (100 - 1)}
+x = t.map{|e| Math::sin(e) + 0.25 * rand}
+b = [0.2] * 5
+a = [1]
+
+y = MFilter::filter(b, a, x)
+
+open("test/data.dat", "w") do |f|
+    f.puts [t, x, y].transpose.map{|e| e.join(" ")}
+end
 ```
+
+
 
 ## Contributing
 
