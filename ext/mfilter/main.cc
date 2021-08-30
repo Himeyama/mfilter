@@ -12,22 +12,26 @@ VALUE rb_m_filter(VALUE self, VALUE b, VALUE a, VALUE x, VALUE si){
         ma(dim_vector(RARRAY_LEN(a), 1)),
         mx(dim_vector(RARRAY_LEN(x), 1)),
         my;
-    for(long i = 0; i < RARRAY_LEN(b); i++)
-        mb(i, 0) = NUM2DBL(rb_ary_entry(b, i));
-    for(long i = 0; i < RARRAY_LEN(a); i++)
-        ma(i, 0) = NUM2DBL(rb_ary_entry(a, i));
-    for(long i = 0; i < RARRAY_LEN(x); i++)
-        mx(i, 0) = NUM2DBL(rb_ary_entry(x, i));
-
+    double* p[3] = {(double*)mb.data(), (double*)ma.data(), (double*)mx.data()};
+    const VALUE* pr[3] = {
+        RARRAY_CONST_PTR_TRANSIENT(b),
+        RARRAY_CONST_PTR_TRANSIENT(a),
+        RARRAY_CONST_PTR_TRANSIENT(x)
+    };
+    long len[3] = {RARRAY_LEN(b), RARRAY_LEN(a), RARRAY_LEN(x)};
+    for(int n = 0; n < 3; n++)
+        for(long i = 0; i < len[n]; i++)
+            p[n][i] = NUM2DBL(pr[n][i]);
+    
     if(si == Qnil){
         my = filter(mb, ma, mx);
-    }else if(rb_funcall(si, rb_intern("is_a?"), 1, rb_cArray) == Qtrue){
+    }else if(rb_obj_class(si) == rb_cArray){
         MArray<double> msi(dim_vector(RARRAY_LEN(si), 1));
         for(long i = 0; i < RARRAY_LEN(si); i++)
             msi(i, 0) = NUM2DBL(rb_ary_entry(si, i));
         my = filter(mb, ma, mx, msi);
     }else{
-        return Qfalse;
+        rb_raise(rb_eTypeError, "si should belong to Array class");
     }
     
     VALUE y = rb_ary_new();
