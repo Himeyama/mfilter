@@ -6,11 +6,13 @@ MatLab (Octave) ライクの `filter` 関数の Ruby 実装。
 ## インストール方法
 
 ### 依存
-- liboctave.so
-- liboctinterp.so
+```sh
+sudo apt update
+sudo apt install liboctave-dev -y
+```
 
 ```ruby
-gem "mfilter", github: "himeyama/mfilter.git", branch: :main
+gem "mfilter"
 ```
 
 Gem のインストールを実行:
@@ -19,8 +21,7 @@ Gem のインストールを実行:
 
 または、
 
-    $ gem install specific_install
-    $ gem specific_install -l "himeyama/mfilter.git"
+    $ gem install mfilter
 
 ## 使用例
 ```ruby
