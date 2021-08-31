@@ -5,12 +5,13 @@ MatLab (Octave) ライクの `filter` 関数の Ruby 実装。
 
 ## インストール方法
 
-### 依存
+> インストールが必要なパッケージ
 ```sh
 sudo apt update
 sudo apt install liboctave-dev -y
 ```
 
+> Gemfile
 ```ruby
 gem "mfilter"
 ```
@@ -19,7 +20,7 @@ Gem のインストールを実行:
 
     $ bundle install
 
-または、
+> Gem のインストール
 
     $ gem install mfilter
 
