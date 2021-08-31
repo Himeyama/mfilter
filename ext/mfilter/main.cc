@@ -6,51 +6,38 @@
 #include <ruby.h>
 #include <numo/narray.h>
 
-
-
 extern VALUE numo_cDFloat;
 
+double* NA_GET_DBL_PT(VALUE na){
+    double* p = (double*)na_get_pointer(na);
+    long offset = na_get_offset(na) / sizeof(double);
+    return p + offset;
+}
 
 VALUE rb_na_filter(VALUE self, VALUE b, VALUE a, VALUE x, VALUE si){
-    long len[3] = {NUM2LONG(rb_funcall(b, rb_intern("size"), 0)), NUM2LONG(rb_funcall(a, rb_intern("size"), 0)), NUM2LONG(rb_funcall(x, rb_intern("size"), 0))};
+    size_t len[3] = {RNARRAY_SIZE(b), RNARRAY_SIZE(a), RNARRAY_SIZE(x)};
     MArray<double>
         mb(dim_vector(len[0], 1)),
         ma(dim_vector(len[1], 1)),
         mx(dim_vector(len[2], 1)),
         my;
-    double* p[3] = {(double*)mb.data(), (double*)ma.data(), (double*)mx.data()};
-    // double* pr[3] = {
-    //     (double*)na_get_pointer(b),
-    //     (double*)na_get_pointer(a),
-    //     (double*)na_get_pointer(x)
-    // };
-    VALUE pr[3] = {
-        b, a, x
-    };
-    VALUE y = rb_funcall(numo_cDFloat, rb_intern("zeros"), 1, LONG2NUM(len[2]));
-    for(int n = 0; n < 3; n++)
-        for(long i = 0; i < len[n]; i++)
-            // p[n][i] = pr[n][i];
-            p[n][i] = NUM2DBL(rb_funcall(pr[n], rb_intern("[]"), 1, INT2NUM(i)));
-
+    memcpy((double*)mb.data(), NA_GET_DBL_PT(b), sizeof(double) * len[0]);
+    memcpy((double*)ma.data(), NA_GET_DBL_PT(a), sizeof(double) * len[1]);
+    memcpy((double*)mx.data(), NA_GET_DBL_PT(x), sizeof(double) * len[2]);
+    VALUE y = rb_funcall(numo_cDFloat, rb_intern("zeros"), 1, LONG2NUM(len[2]));   
             
     if(si == Qnil)
         my = filter(mb, ma, mx);
     else if(rb_obj_class(si) == numo_cDFloat){
         long lsi = NUM2LONG(rb_funcall(si, rb_intern("size"), 0));
         MArray<double> msi(dim_vector(lsi, 1));
-        double* namsi = (double*)na_get_pointer(si);
-        for(long i = 0; i < lsi; i++)
-            msi(i, 0) = namsi[i];
+        double* namsi = NA_GET_DBL_PT(si);
+        memcpy((double*)msi.data(), namsi, sizeof(double) * lsi);
         my = filter(mb, ma, mx, msi);
     }
     else
-        rb_raise(rb_eTypeError, "si should belong to DFloat class");
-
-    double* py = (double*)na_get_pointer(y);
-    double* pmy = (double*)my.data();
-    for(long i = 0; i < len[2]; i++)
-        py[i] = pmy[i];
+        rb_raise(rb_eTypeError, "si should belong to Numo::DFloat class");
+    memcpy(NA_GET_DBL_PT(y),  (double*)my.data(), sizeof(double) * len[2]);
 
     return y;
 }
