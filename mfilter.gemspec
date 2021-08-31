@@ -7,6 +7,7 @@ Gem::Specification.new do |spec|
   spec.version       = Mfilter::VERSION
   spec.authors       = ["Murata Mitsuharu"]
   spec.email         = ["hikari.photon+dev@gmail.com"]
+  spec.license       = "GPL-3"
 
   spec.summary       = "Function module similar to `filter` in MatLab or Octave."
   spec.required_ruby_version = Gem::Requirement.new(">= 2.3.0")
