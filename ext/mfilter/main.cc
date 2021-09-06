@@ -1,4 +1,4 @@
-#include <octave/oct.h>
+#include <oct.h>
 #include <iostream>
 #include <math.h>
 #include <vector>
