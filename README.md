@@ -9,6 +9,10 @@ MatLab (Octave) ライクの `filter` 関数の Ruby 実装。
 ```sh
 sudo apt update
 sudo apt install liboctave-dev -y
+
+# or
+
+brew install octave
 ```
 
 > Gemfile
