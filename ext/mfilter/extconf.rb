@@ -4,6 +4,7 @@ require "mkmf"
 oct_inc_dir = Dir.glob("#{ENV["HOME"]}/.linuxbrew/include/octave-*")
 oct_inc_dir = Dir.glob("/home/linuxbrew/.linuxbrew/include/octave-*") if oct_inc_dir.empty?
 
+
 unless oct_inc_dir.empty?
     oct_inc_dir = oct_inc_dir[0]
     if File.exist? oct_inc_dir
@@ -33,11 +34,9 @@ else
         raise "Octave がインストールされていません"
     end
 end
-$LDFLAGS += " -L#{oct_lib_dir}"
 $INCFLAGS += " -I#{oct_inc_dir}"
+$LDFLAGS += " -L#{oct_lib_dir}"
 $libs += " -loctinterp"
-
-
 
 narray_dir = Gem.find_files("numo").map{|e| e.include?("narray") ? e : false}.select{|e| e}.to_a[0]
 $LDFLAGS += " -L#{narray_dir}"
