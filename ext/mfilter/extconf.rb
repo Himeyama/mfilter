@@ -2,6 +2,8 @@ require "mkmf"
 
 # homebrew で Octave がインストールされている場合
 oct_inc_dir = Dir.glob("#{ENV["HOME"]}/.linuxbrew/include/octave-*")
+oct_inc_dir = Dir.glob("/home/linuxbrew/.linuxbrew/include/octave-*") if oct_inc_dir.empty?
+
 unless oct_inc_dir.empty?
     oct_inc_dir = oct_inc_dir[0]
     if File.exist? oct_inc_dir
@@ -12,6 +14,7 @@ unless oct_inc_dir.empty?
     end
     oct_inc_dir += "/octave"
     oct_lib_dir = "#{ENV["HOME"]}/.linuxbrew/lib/octave/#{oct_ver}"
+    oct_lib_dir = "/home/linuxbrew/.linuxbrew/lib/octave/#{oct_ver}" unless File.exist?(oct_lib_dir)
     oct_lib_dir = File.exist?(oct_lib_dir) ? oct_lib_dir : nil
 else
     oct_inc_dir = Dir.glob("/usr/include/octave-*")
