@@ -44,10 +44,11 @@ VALUE rb_na_filter(VALUE self, VALUE b, VALUE a, VALUE x, VALUE si){
 
 
 VALUE rb_m_filter(VALUE self, VALUE b, VALUE a, VALUE x, VALUE si){
+    long len[3] = {RARRAY_LEN(b), RARRAY_LEN(a), RARRAY_LEN(x)};
     MArray<double>
-        mb(dim_vector(RARRAY_LEN(b), 1)),
-        ma(dim_vector(RARRAY_LEN(a), 1)),
-        mx(dim_vector(RARRAY_LEN(x), 1)),
+        mb(dim_vector(len[0], 1)),
+        ma(dim_vector(len[1], 1)),
+        mx(dim_vector(len[2], 1)),
         my;
     double* p[3] = {(double*)mb.data(), (double*)ma.data(), (double*)mx.data()};
     const VALUE* pr[3] = {
@@ -55,12 +56,11 @@ VALUE rb_m_filter(VALUE self, VALUE b, VALUE a, VALUE x, VALUE si){
         RARRAY_CONST_PTR_TRANSIENT(a),
         RARRAY_CONST_PTR_TRANSIENT(x)
     };
-    long len[3] = {RARRAY_LEN(b), RARRAY_LEN(a), RARRAY_LEN(x)};
     VALUE y;
     for(int n = 0; n < 3; n++)
         for(long i = 0; i < len[n]; i++)
             p[n][i] = NUM2DBL(pr[n][i]);
-    
+
     if(si == Qnil)
         my = filter(mb, ma, mx);
     else if(rb_obj_class(si) == rb_cArray){
@@ -71,7 +71,7 @@ VALUE rb_m_filter(VALUE self, VALUE b, VALUE a, VALUE x, VALUE si){
     }
     else
         rb_raise(rb_eTypeError, "si should belong to Array class");
-    
+
     y = rb_ary_new();
     for(long i = 0; i < RARRAY_LEN(x); i++)
         rb_ary_store(y, i, DBL2NUM(my(i, 0)));

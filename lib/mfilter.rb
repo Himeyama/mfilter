@@ -3,6 +3,10 @@
 require_relative "mfilter/version"
 
 require "numo/narray"
+
+# ENV["LD_PRELOAD"] = "/mnt/export1/st3/b033vbv/.linuxbrew/lib/libz.so"
+ENV.update({"LD_PRELOAD" => "/mnt/export1/st3/b033vbv/.linuxbrew/lib/libz.so"})
+
 require "mfilter.so"
 
 module MFilter
@@ -15,6 +19,11 @@ module MFilter
         raise TypeError, "si should be nil or belong to Array class" unless si.is_a? Array or si.nil? or si.is_a? Numo::DFloat
         b = [b.to_f] if b.is_a? Numeric
         a = [a.to_f] if a.is_a? Numeric
+
+        if b.is_a?(Array) and a.is_a?(Array) and x.is_a?(Array)
+            return _filter(b, a, x, si)
+        end
+
         b, a, x = [Numo::DFloat.cast(b), Numo::DFloat.cast(a), Numo::DFloat.cast(x)]
         si = Numo::DFloat.cast(si) if si
 
